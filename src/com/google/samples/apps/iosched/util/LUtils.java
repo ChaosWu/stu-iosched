@@ -67,10 +67,11 @@ public class LUtils {
 //            options = ActivityOptions.makeSceneTransitionAnimation(
 //                    mActivity, clickedView, transitionName);
         }
-		// Activity activity=new Activity();
-		// activity.startActivity(intent, (options != null) ? options.toBundle()
-		// : null);
+		 Activity activity=new Activity();
+		 activity.startActivity(intent, (options != null) ? options.toBundle()
+		 : null);
         mActivity.startActivity(intent, (options != null) ? options.toBundle() : null);
+      
     }
 
     public void setMediumTypeface(TextView textView) {

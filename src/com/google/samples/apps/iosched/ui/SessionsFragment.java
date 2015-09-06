@@ -147,6 +147,7 @@ public class SessionsFragment extends Fragment implements
 	private static final String CARD_ANSWER_YES = "CARD_ANSWER_YES";
 	private static final String CARD_ANSWER_NO = "CARD_ANSWER_NO";
 
+	// 内容观察者
 	private ThrottledContentObserver mSessionsObserver, mTagsObserver;
 
 	private Handler mHandler = new Handler() {
@@ -174,8 +175,8 @@ public class SessionsFragment extends Fragment implements
 		mCollectionView.setContentTopClearance(topClearance);
 	}
 
-	// 当有一个变化对会话的内容提供商
 	// Called when there is a change on sessions in the content provider
+	// 当有一个变化对会话的内容提供商
 	private void onSessionsContentChanged() {
 		LOGD(TAG, "ThrottledContentObserver fired (sessions). Content changed.");
 		if (!isAdded()) {
@@ -257,7 +258,7 @@ public class SessionsFragment extends Fragment implements
 		if (mImageLoader == null) {
 			mImageLoader = new ImageLoader(this.getActivity());
 		}
-		//颜色
+		// 颜色
 		mDefaultSessionColor = getResources().getColor(
 				R.color.default_session_color);
 
@@ -266,6 +267,7 @@ public class SessionsFragment extends Fragment implements
 		mTimeFormat.setTimeZone(tz);
 
 		if (savedInstanceState != null) {
+
 			mSessionQueryToken = savedInstanceState
 					.getInt(STATE_SESSION_QUERY_TOKEN);
 			mArguments = savedInstanceState.getParcelable(STATE_ARGUMENTS);
@@ -281,6 +283,8 @@ public class SessionsFragment extends Fragment implements
 				// existing loader. Otherwise, the loader will be init'd when
 				// reloadFromArguments
 				// is called.
+
+				// 只有这是一个配置的变化我们应该initloader()，与现有的装载机连接。否则，加载程序将初始化的时候会reloadfromarguments叫做。
 				getLoaderManager().initLoader(mSessionQueryToken, null,
 						SessionsFragment.this);
 			}
@@ -310,11 +314,15 @@ public class SessionsFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_sessions, container, false);
+		// ListView
 		mCollectionView = (CollectionView) root
 				.findViewById(R.id.sessions_collection_view);
+		//
 		mPreloader = new Preloader(ROWS_TO_PRELOAD);
 		mCollectionView.setOnScrollListener(mPreloader);
+
 		mEmptyView = (TextView) root.findViewById(R.id.empty_text);
+		//
 		mLoadingView = root.findViewById(R.id.loading);
 		return root;
 	}
@@ -920,6 +928,7 @@ public class SessionsFragment extends Fragment implements
 		}
 
 		// if a snippet view is available, render the session snippet there.
+		//如果一段视图可用，使会话片段有。
 		if (snippetView != null) {
 			if (mIsSearchCursor) {
 				// render the search snippet into the snippet view
@@ -1125,6 +1134,7 @@ public class SessionsFragment extends Fragment implements
 	private void animateSessionAppear(final View view) {
 	}
 
+	// ---start
 	private class Preloader extends ListPreloader<String> {
 
 		private int[] photoDimens;
@@ -1142,6 +1152,7 @@ public class SessionsFragment extends Fragment implements
 			return photoDimens != null;
 		}
 
+		//
 		public void setDimens(int width, int height) {
 			if (photoDimens == null) {
 				photoDimens = new int[] { width, height };
@@ -1177,6 +1188,8 @@ public class SessionsFragment extends Fragment implements
 			return mImageLoader.beginImageLoad(url, null, true /* crop */);
 		}
 	}
+
+	// ---end
 
 	/**
 	 * {@link com.google.samples.apps.iosched.provider.ScheduleContract.Sessions}
